@@ -55,7 +55,7 @@ async function loadResourcesAsync() {
     ]);
 }
 
-function handleLoadingError(error: Error) {
+function handleLoadingError(error) {
     // In this case, you might want to report the error to your error reporting
     // service, for example Sentry
     console.warn(error);
@@ -73,4 +73,4 @@ const styles = StyleSheet.create({
 });
 
 // require('./assets/images/robot-dev.png'),
-            // require('./assets/images/robot-prod.png'),
+// require('./assets/images/robot-prod.png'),
