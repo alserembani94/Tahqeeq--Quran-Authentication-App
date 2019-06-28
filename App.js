@@ -6,7 +6,6 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import {
     mapping,
-    light,
 } from '@eva-design/eva';
 import { theme } from './constants/colorTheme';
 import { ApplicationProvider } from 'react-native-ui-kitten';
@@ -42,8 +41,7 @@ export default function App(props) {
 async function loadResourcesAsync() {
     await Promise.all([
         Asset.loadAsync([
-            require('./assets/images/robot-dev.png'),
-            require('./assets/images/robot-prod.png'),
+            
         ]),
         Font.loadAsync({
             // This is the font that we are using for our tab bar
@@ -73,3 +71,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
 });
+
+// require('./assets/images/robot-dev.png'),
+            // require('./assets/images/robot-prod.png'),
