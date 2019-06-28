@@ -29,7 +29,7 @@
     },
     "android": {
       "package": "com.um.tahqeeq",
-      "versionCode": 2
+      "versionCode": 2,
       "permissions": []
     },
     "description": "Tahqeeq is a Quran Authentication App to check the textual quranic verse whether the text is tempered or not.",
