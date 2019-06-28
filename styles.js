@@ -5,7 +5,6 @@ import {
 
 export default styles = StyleSheet.create({
     background: {
-        backgroundColor: '#F9F9F9',
     },
     //212740
     //#F9F9F9
@@ -37,6 +36,7 @@ export default styles = StyleSheet.create({
         marginTop: 10,
         borderRadius: 8,
         marginBottom: 20,
+        
     },
 
     menuList: {
@@ -48,17 +48,22 @@ export default styles = StyleSheet.create({
         paddingVertical: 17,
         paddingHorizontal: 20,
         flexDirection: 'row',
+        justifyContent: 'center',
         alignItems: 'center',
         borderBottomColor: 'rgba(200,200,200, 1.0)',
         borderBottomWidth: .5,
         borderTopColor: 'rgba(200,200,200, 1.0)',
         borderTopWidth: .5,
     },
+    menuDisabled: {
+        color: 'gray',
+    },
     optionContainer: {
         paddingVertical: 10,
         width: '100%',
         display: 'flex',
         justifyContent: 'center',
+        alignItems: 'center',
     }
 });
 

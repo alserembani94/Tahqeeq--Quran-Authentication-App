@@ -29,89 +29,89 @@ import LinksScreen from '../screens/LinksScreen';
 
 //-------------------------HOME STACK----------------------------------------------//
 const HomeStack = createStackNavigator({
-  Home: HomeScreen,
-  HomeResult: HomeResultScreen,
+    Home: HomeScreen,
+    HomeResult: HomeResultScreen,
 });
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
-  tabBarOnPress: ({navigation, defaultHandler}) => (
-    navigation.dispatch(StackActions.popToTop()),
-    defaultHandler()
-  ),
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
-    />
-  )
+    tabBarLabel: 'Home',
+    tabBarOnPress: ({navigation, defaultHandler}) => (
+        navigation.dispatch(StackActions.popToTop()),
+        defaultHandler()
+    ),
+    tabBarIcon: ({ focused }) => (
+        <TabBarIcon
+            focused={focused}
+            name={
+                Platform.OS === 'ios'
+                    ? `ios-home${focused ? '' : '-outline'}`
+                    : 'md-home'
+            }
+        />
+    )
 };
 
 //-------------------------LINK STACK----------------------------------------------------//
 const LinksStack = createStackNavigator({
-  Links: LinksScreen,
+    Links: LinksScreen,
 });
 
 LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
-    />
-  ),
+    tabBarLabel: 'Links',
+    tabBarIcon: ({ focused }) => (
+        <TabBarIcon
+            focused={focused}
+            name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+        />
+    ),
 };
 
 //---------------------------SETTINGS STACK--------------------------------------------------//
 const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
+    Settings: SettingsScreen,
 });
 
 SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
-    />
-  ),
+    tabBarLabel: 'Settings',
+    tabBarIcon: ({ focused }) => (
+        <TabBarIcon
+            focused={focused}
+            name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+        />
+    ),
 };
 
 //--------------------------EVENT STACK---------------------------------------------//
 const EventStack = createStackNavigator({
-  Event: EventScreen,
-  PracticeOption: PracticeOptionScreen,
-  PracticeInput: PracticeInputScreen,
-  PracticeResult: PracticeResultScreen,
+    Event: EventScreen,
+    PracticeOption: PracticeOptionScreen,
+    PracticeInput: PracticeInputScreen,
+    PracticeResult: PracticeResultScreen,
 });
 
 EventStack.navigationOptions = {
-  tabBarLabel: 'Events',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
-    />
-  ),
+    tabBarLabel: 'Events',
+    tabBarIcon: ({ focused }) => (
+        <TabBarIcon
+            focused={focused}
+            name={Platform.OS === 'ios' ? 'ios-rocket' : 'md-rocket'}
+        />
+    ),
 };
 
 //--------------------------ABOUT STACK---------------------------------------------//
 const AboutStack = createStackNavigator({
-  About: AboutScreen,
+    About: AboutScreen,
 });
 
 AboutStack.navigationOptions = {
-  tabBarLabel: 'About Us',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
-    />
-  ),
+    tabBarLabel: 'About Us',
+    tabBarIcon: ({ focused }) => (
+        <TabBarIcon
+          focused={focused}
+          name={Platform.OS === 'ios' ? 'ios-information-circle' : 'md-information-circle'}
+        />
+    ),
 };
 
 // AVAILABLE STACK
@@ -122,11 +122,11 @@ AboutStack.navigationOptions = {
 // AboutStack, ✔️
 
 export default createBottomTabNavigator({
-  HomeStack,
-  EventStack,
-  AboutStack,
+    HomeStack,
+    EventStack,
+    AboutStack,
 }, {
-  tabBarOptions: {
-    activeTintColor: 'green',
-  }
+    tabBarOptions: {
+        activeTintColor: 'green',
+    }
 });

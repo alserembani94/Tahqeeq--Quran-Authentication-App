@@ -1,7 +1,7 @@
 import React from 'react';
 import {
+    Picker,
     ScrollView,
-    View,
 } from 'react-native';
 import {
     ButtonGroup
@@ -29,6 +29,8 @@ export default class PracticeOptionScreen extends React.Component {
         this.updatePracticeModeIndex = this.updatePracticeModeIndex.bind(this);
         this.updateVerseSelectionModeIndex = this.updateVerseSelectionModeIndex.bind(this);
         this.updateRandomLevelIndex = this.updateRandomLevelIndex.bind(this);
+        this.updateJuzLevelIndex = this.updateJuzLevelIndex.bind(this);
+        this.updateChapterLevelIndex = this.updateChapterLevelIndex.bind(this);
         this.updateTashkeelFilter = this.updateTashkeelFilter.bind(this);
     }
 
@@ -44,6 +46,14 @@ export default class PracticeOptionScreen extends React.Component {
         this.setState({ randomLevelIndex });
     }
 
+    updateJuzLevelIndex(juzLevelIndex) {
+        this.setState({ juzLevelIndex });
+    }
+
+    updateChapterLevelIndex(chapterLevelIndex) {
+        this.setState({ chapterLevelIndex });
+    }
+
     updateTashkeelFilter(tashkeelFilter) {
         this.setState({ tashkeelFilter });
     }
@@ -52,6 +62,7 @@ export default class PracticeOptionScreen extends React.Component {
         const practiceMode = ['Hafazan', 'Typing'];
         const verseSelectionMode = ['Random', 'User Select'];
         const randomLevel = ['Whole Quran', 'Juz', 'Chapter'];
+        const juzLevel = [...Array(31).keys()].slice(1);
         const { practiceModeIndex, verseSelectionModeIndex, randomLevelIndex, juzLevelIndex, chapterLevelIndex, tashkeelFilter } = this.state;
 
         return (
@@ -95,6 +106,21 @@ export default class PracticeOptionScreen extends React.Component {
                             containerStyle={{ borderRadius: 5, marginTop: 15 }}
                             selectedButtonStyle={{ backgroundColor: 'green' }}
                         />
+                    </Layout>
+
+                    <Layout style={styles.optionContainer} for="Juz Level">
+                        <Text category="h6" style={{ textAlign: 'center' }}>Juz Selection</Text>
+                        <Text category="c1" style={{ textAlign: 'center' }} appearance="hint">Choose which juz you want to be picked from.</Text>
+                        <Picker
+                            selectedValue={juzLevelIndex}
+                            onValueChange={this.updateJuzLevelIndex}
+                            style={{ width: '50%', display: 'flex', justifyContent: 'center', elevation: 2 }}
+                            itemStyle={{ borderColor: 'red', borderWidth: 1 }}
+                        >
+                            {
+                                juzLevel.map(juz => <Picker.Item key={juz} label={juz.toString()} value={juz} />)
+                            }
+                        </Picker>
                     </Layout>
 
                 </Layout>

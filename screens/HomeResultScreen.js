@@ -12,6 +12,8 @@ import QuranicResultUserInput from '../components/QuranicResultUserInput';
 import QuranicResultMatch from '../components/QuranicResultMatch';
 import QuranicResultFilter from '../components/QuranicResultFilter';
 
+
+
 export default class HomeResultScreen extends React.Component {
     constructor(props) {
         super(props);
@@ -24,7 +26,8 @@ export default class HomeResultScreen extends React.Component {
     componentDidMount() {
         this.fetchVerses().then(result => {
             // Search the verse here
-            this.setState({ isSearched: true })
+            this.setState({ isSearched: true });
+            return null;
         }).then(nextResult => {
             // Filter the verse here
             this.setState({ isFiltered: true });

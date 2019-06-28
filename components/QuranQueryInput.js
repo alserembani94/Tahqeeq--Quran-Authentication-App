@@ -21,13 +21,13 @@ export default class QuranQueryInput extends React.Component {
         const inputError = ( userInput == ''
             ? undefined
             : userInput.match(/[^\u0621-\u064A\u0671-\u0673\u064B-\u0653\s]/g)
-                ? 'Invalid input - only arabic character allowed'
+                ? `Invalid input - only arabic character allowed. Please install the arabic keyboard from the system setting if not installed.`
                 : this.props.withTashkeel
                     ? userInput.match(/[\u064B-\u0653]/g)
                         ? undefined
-                        : 'No tashkeel detected'
+                        : 'No tashkeel detected.'
                     : userInput.match(/[\u064B-\u0653]/g)
-                        ? "Tashkeel detected - please choose 'Search verse with tashkeel' instead"
+                        ? "Tashkeel detected - please choose 'Search verse with tashkeel' instead."
                         : undefined
         );
 

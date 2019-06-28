@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Platform,
     ScrollView,
     TouchableOpacity,
 } from 'react-native';
@@ -28,27 +29,27 @@ export default class EventScreen extends React.Component {
                     <Layout style={styles.menuList}>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('PracticeOption')} style={styles.menuListItem}>
                             <Icon
-                                name='ios-american-football'
+                                name={Platform.OS === 'ios' ? 'ios-flash' : 'md-flash'}
                                 type='ionicon'
-                                color='#517fa4'
+                                color='green'
                             />
                             <Text>          Self Practice</Text>                    
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={null} style={styles.menuListItem}>
+                        <TouchableOpacity onPress={null} style={styles.menuListItem} disabled>
                             <Icon
-                                name='ios-american-football'
+                                name={Platform.OS === 'ios' ? 'ios-trophy' : 'md-trophy'}
                                 type='ionicon'
-                                color='#517fa4'
+                                color='gray'
                             />
-                            <Text>          Join Competition</Text>                    
+                            <Text style={styles.menuDisabled}>          Join Competition - in progress</Text>                    
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={null} style={styles.menuListItem}>
+                        <TouchableOpacity onPress={null} style={styles.menuListItem} disabled>
                             <Icon
-                                name='ios-american-football'
+                                name={Platform.OS === 'ios' ? 'ios-rocket' : 'md-rocket'}
                                 type='ionicon'
-                                color='#517fa4'
+                                color='gray'
                             />
-                            <Text>          Create Competition</Text>                    
+                            <Text style={styles.menuDisabled}>          Create Competition - in progress</Text>                    
                         </TouchableOpacity>
                     </Layout>
                 </Layout>

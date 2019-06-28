@@ -2,12 +2,14 @@ import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
 import {
     ScrollView,
+    ImageBackground,
 } from 'react-native';
 import {
     Button,
 } from 'react-native-ui-kitten';
 
 import styles from '../styles';
+import background from '../assets/images/background.png';
 
 import QuranQueryInput from '../components/QuranQueryInput';
 import QuranQueryOption from '../components/QuranQueryOption';
@@ -40,24 +42,27 @@ export default class HomeScreen extends React.Component {
     render() {
         const { userInput, withTashkeel, inputErrorStatus } = this.state;
         return (
-            <ScrollView style={styles.background}>
-                <QuranQueryInput
-                    userInput={userInput}
-                    withTashkeel={withTashkeel}
-                    updateUserInput={this.updateUserInput}
-                    inputError={this.inputError}
-                />
-                <QuranQueryOption
-                    withTashkeel={withTashkeel}
-                    updateTashkeelOption={this.updateTashkeelOption}
-                />
+            <ImageBackground source={background} style={{ width: '100%', height: '100%' }}>
+                <ScrollView style={styles.background}>
+                
+                    <QuranQueryInput
+                        userInput={userInput}
+                        withTashkeel={withTashkeel}
+                        updateUserInput={this.updateUserInput}
+                        inputError={this.inputError}
+                    />
+                    <QuranQueryOption
+                        withTashkeel={withTashkeel}
+                        updateTashkeelOption={this.updateTashkeelOption}
+                    />
 
-                <Button
-                    disabled={(inputErrorStatus || userInput == '') ? true : false}
-                    style={styles.submitButton}
-                    onPress={() => this.props.navigation.navigate('HomeResult', this.state)}
-                >Check</Button>
-            </ScrollView>
+                    <Button
+                        disabled={(inputErrorStatus || userInput == '') ? true : false}
+                        style={styles.submitButton}
+                        onPress={() => this.props.navigation.navigate('HomeResult', this.state)}
+                    >Check</Button>
+                </ScrollView>
+            </ImageBackground>
         );
     }
 }
