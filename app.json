@@ -24,9 +24,14 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.um.tahqeeq"
+    },
+    "android": {
+      "package": "com.um.tahqeeq"
     },
     "description": "Tahqeeq is a Quran Authentication App to check the textual quranic verse whether the text is tempered or not.",
     "githubUrl": "https://github.com/alserembani94/Tahqeeq--Quran-Authentication-App"
+    
   }
 }
