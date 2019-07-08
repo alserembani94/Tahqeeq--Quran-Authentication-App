@@ -21,7 +21,6 @@ export default class HomeResultScreen extends React.Component {
         super(props);
         this.state = {
             isSearched: false,
-            isFiltered: false,
         };
     }
 
@@ -29,9 +28,6 @@ export default class HomeResultScreen extends React.Component {
         this.fetchVerses().then(verses => {
             const bestVerseMatch = findBestVerseMatch(this.props.navigation.getParam('userInput'), verses, this.state.tashkeelOption);
             this.setState({ isSearched: true, bestVerseMatch });
-        }).then(nextResult => {
-            // Filter the verse here
-            this.setState({ isFiltered: true });
         });
     }
 
@@ -45,22 +41,16 @@ export default class HomeResultScreen extends React.Component {
     }
 
     render() {
-        const { isSearched, isFiltered } = this.state;
+        const { isSearched } = this.state;
         return (
             <ScrollView style={styles.background}>
                 {
                     isSearched /* searching indicator */
                     ? (
-                        <View>
+                        <Layout>
                             <QuranicResultUserInput userInput={this.props.navigation.getParam('userInput')}/>
                             <QuranicResultMatch matchedVerse={this.state.bestVerseMatch && this.state.bestVerseMatch} />
-                            <QuranicResultFilter filteredVerse={{ first: 'قل' }} />
-                        </View>
-                    )
-                    : isFiltered
-                    ? (
-                        <Layout>
-                            <Text>Filtering the input with the match</Text>
+                            <QuranicResultFilter userInput={this.props.navigation.getParam('userInput')} bestMatch={this.state.bestVerseMatch} withTashkeel={this.props.navigation.getParam('withTashkeel')} />
                         </Layout>
                     )
                     : (

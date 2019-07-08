@@ -18,9 +18,9 @@ export default class QuranicResultMatch extends React.Component {
             <Layout style={styles.cardContainer}>
                 <Text category="h6">Quranic Match</Text>
                 <ArabicText>{this.props.matchedVerse.textual[0].text}</ArabicText>
-                <Card title="Hello">
-                    <Text>{this.props.matchedVerse.chapter.name}</Text>
-                    <Text>{this.props.matchedVerse.number_in_chapter}</Text>
+                <Card title="Verse Info">
+                    <Text style={{ textAlign: 'center' }}>{this.props.matchedVerse.chapter.name}</Text>
+                    <Text style={{ textAlign: 'center' }}>{this.props.matchedVerse.number_in_chapter}</Text>
                 </Card>
             </Layout>
         );
