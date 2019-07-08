@@ -12,6 +12,8 @@ import QuranicResultUserInput from '../components/QuranicResultUserInput';
 import QuranicResultMatch from '../components/QuranicResultMatch';
 import QuranicResultFilter from '../components/QuranicResultFilter';
 
+// Importing all functions
+import { findBestVerseMatch } from '../functions/quranicFilter';
 
 
 export default class HomeResultScreen extends React.Component {
@@ -24,10 +26,9 @@ export default class HomeResultScreen extends React.Component {
     }
 
     componentDidMount() {
-        this.fetchVerses().then(result => {
-            // Search the verse here
-            this.setState({ isSearched: true });
-            return null;
+        this.fetchVerses().then(verses => {
+            const bestVerseMatch = findBestVerseMatch(this.props.navigation.getParam('userInput'), verses, this.state.tashkeelOption);
+            this.setState({ isSearched: true, bestVerseMatch });
         }).then(nextResult => {
             // Filter the verse here
             this.setState({ isFiltered: true });
@@ -52,7 +53,7 @@ export default class HomeResultScreen extends React.Component {
                     ? (
                         <View>
                             <QuranicResultUserInput userInput={this.props.navigation.getParam('userInput')}/>
-                            <QuranicResultMatch matchedVerse="قل هو الله احد" />
+                            <QuranicResultMatch matchedVerse={this.state.bestVerseMatch && this.state.bestVerseMatch} />
                             <QuranicResultFilter filteredVerse={{ first: 'قل' }} />
                         </View>
                     )

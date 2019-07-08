@@ -24,7 +24,7 @@ export default styles = StyleSheet.create({
                 shadowRadius: 3,
             },
             android: {
-                elevation: 4,
+                elevation: 3,
             },
         }),
         display: 'flex',
@@ -36,7 +36,19 @@ export default styles = StyleSheet.create({
         marginTop: 10,
         borderRadius: 8,
         marginBottom: 20,
-        
+        ...Platform.select({
+            ios: {
+                shadowColor: 'black',
+                shadowOffset: { width: 0, height: -3 },
+                shadowOpacity: 0.1,
+                shadowRadius: 3,
+            },
+            android: {
+                elevation: 2,
+            },
+        }),
+        display: 'flex',
+        flexDirection: 'column',        
     },
 
     menuList: {
