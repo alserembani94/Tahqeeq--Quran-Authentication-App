@@ -16,75 +16,109 @@ import {
 } from 'react-native-ui-kitten';
 
 import styles from '../styles';
-import { FlexStyleProps } from 'react-native-ui-kitten/ui/support/typings';
 
 export default class PracticeOptionScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             practiceModeIndex: 0,
-            verseSelectionModeIndex: 0,
-            randomLevelIndex: 0,
-            juzLevelIndex: null,
-            chapterLevelIndex: null,
+            selectionModeIndex: 0,
+            randomSelectionIndex: 0,
+            selectedJuz: 1,
             tashkeelFilter: false,
-            verseSelectionModalVisibility: false,
-            selectedVerse: null,
+
+            selectedChapterID: null,
+            selectedVerseID: null,
+            chapterInfoIsLoaded: false,
+            verseInfoIsLoaded: false,
+
+            isRandomised: false,
+            isSelected: false,
         };
+
         this.updatePracticeModeIndex = this.updatePracticeModeIndex.bind(this);
-        this.updateVerseSelectionModeIndex = this.updateVerseSelectionModeIndex.bind(this);
-        this.updateRandomLevelIndex = this.updateRandomLevelIndex.bind(this);
-        this.updateJuzLevelIndex = this.updateJuzLevelIndex.bind(this);
-        this.updateChapterLevelIndex = this.updateChapterLevelIndex.bind(this);
+        this.updateSelectionModeIndex = this.updateSelectionModeIndex.bind(this);
+        this.updateRandomSelectionIndex = this.updateRandomSelectionIndex.bind(this);
+        this.updateSelectedJuz = this.updateSelectedJuz.bind(this);
         this.updateTashkeelFilter = this.updateTashkeelFilter.bind(this);
-        this.updateVerseSelection = this.updateVerseSelection.bind(this);
-        this.toggleVerseSelectionModalVisibility = this.toggleVerseSelectionModalVisibility.bind(this);
+        this.updateSelectedChapterID = this.updateSelectedChapterID.bind(this);
+        this.updateSelectedVerseID = this.updateSelectedVerseID.bind(this);
     }
 
-    // Update selection values
+    componentDidMount() {
+        this.fetchChapterInfo().then(chapterInfo => {
+            this.setState({ chapterInfo, chapterInfoIsLoaded: true })
+            this.state.selectedChapterID == null && this.setState({ selectedChapterID: chapterInfo[0]._id })
+        }).then(() => {
+            this.fetchVersesInChapter(this.state.selectedChapterID).then(verseInfo => {
+                this.setState({ verseInfo, verseInfoIsLoaded: true })
+                this.state.selectedVerseID == null && this.setState({ selectedVerseID: verseInfo[0]._id })
+            })
+        }).catch(
+            error => console.log(error)
+        )
+    }
 
     updatePracticeModeIndex(practiceModeIndex) {
         this.setState({ practiceModeIndex });
     }
 
-    updateVerseSelectionModeIndex(verseSelectionModeIndex) {
-        this.setState({ verseSelectionModeIndex, randomLevelIndex: 0 });
+    updateSelectionModeIndex(selectionModeIndex) {
+        this.setState({ selectionModeIndex, randomSelectionIndex: 0 });
     }
 
-    updateRandomLevelIndex(randomLevelIndex) {
-        this.setState({ randomLevelIndex });
+    updateRandomSelectionIndex(randomSelectionIndex) {
+        this.setState({ randomSelectionIndex });
     }
 
-    updateJuzLevelIndex(juzLevelIndex) {
-        this.setState({ juzLevelIndex });
-    }
-
-    updateChapterLevelIndex(chapterLevelIndex) {
-        this.setState({ chapterLevelIndex });
+    updateSelectedJuz(selectedJuz) {
+        this.setState({ selectedJuz });
     }
 
     updateTashkeelFilter(tashkeelFilter) {
         this.setState({ tashkeelFilter });
     }
 
-    updateVerseSelection() {
-        this.setState({ selectedVerse: {} });
+    updateSelectedChapterID(selectedChapterID) {
+        this.setState({ selectedChapterID, verseInfoIsLoaded: false });
+        this.fetchVersesInChapter(selectedChapterID).then(verseInfo => {
+            this.setState({ verseInfo, verseInfoIsLoaded: true })
+            this.state.selectedVerseID == null && this.setState({ selectedVerseID: verseInfo[0]._id })
+        })
     }
 
-    toggleVerseSelectionModalVisibility() {
-        this.setState({ verseSelectionModalVisibility: !this.state.verseSelectionModalVisibility });
+    updateSelectedVerseID(selectedVerseID) {
+        this.setState({ selectedVerseID, isSelected: true });
+    }
+
+    fetchChapterInfo = async() => {
+        const response = await fetch('https://mighty-depths-66221.herokuapp.com/qas/chapters');
+        const body = await response.json();
+        if (response.status !== 200) {
+            throw Error(body.message)
+        }
+        return body;
+    }
+
+    fetchVersesInChapter = async(chapterID) => {
+        const response = await fetch('https://mighty-depths-66221.herokuapp.com/qas/verse/chapter/' + chapterID);
+        const body = await response.json();
+        if (response.status !== 200) {
+            throw Error(body.message)
+        }
+        return body;
     }
 
     render() {
-        const practiceMode = ['Hafazan'];
-        const verseSelectionMode = ['Random', 'User Select'];
-        const randomLevel = ['Whole Quran', 'Juz', 'Chapter'];
-        const juzLevel = [...Array(31).keys()].slice(1);
-        const chapterLevel = [...Array(145).keys()].slice(1);
-        const { practiceModeIndex, verseSelectionModeIndex, randomLevelIndex, juzLevelIndex, chapterLevelIndex, tashkeelFilter } = this.state;
+        const { practiceModeIndex, selectionModeIndex, randomSelectionIndex, selectedJuz, tashkeelFilter, selectedChapterID, chapterInfo, chapterInfoIsLoaded, selectedVerseID, verseInfo, verseInfoIsLoaded, selectedVerseObject, isSelected } = this.state;
+        const practiceModeList = ['Hafazan'];
+        const selectionModeList = ['Random', 'User Select'];
+        const randomSelectionList = ['Whole Quran', 'Juz', 'Chapter'];
+        const randomJuz = [...Array(31).keys()].slice(1);
 
         return (
             <ScrollView style={styles.background}>
+                {/* Practice Mode Selection */}
                 <Layout style={styles.cardContainer}>
                     <Text category="h5">Practice Mode</Text>
                     <Text category="c1" appearance="hint">Choose the mode of practice.</Text>
@@ -92,37 +126,39 @@ export default class PracticeOptionScreen extends React.Component {
                     <ButtonGroup
                         onPress={this.updatePracticeModeIndex}
                         selectedIndex={practiceModeIndex}
-                        buttons={practiceMode}
+                        buttons={practiceModeList}
                         containerStyle={{ borderRadius: 5 }}
                         selectedButtonStyle={{ backgroundColor: 'green' }}
                     />
                 </Layout>
 
+                {/* Verse Selection */}
                 <Layout style={styles.cardContainer}>
                     <Text category="h5">Verse Selection</Text>
                     <Text></Text>
 
-                    <Layout style={styles.optionContainer} for="Verse Selection">
+                    <Layout style={styles.optionContainer} for="Verse Selection Mode">
                         <Text category="h6" style={{ textAlign: 'center' }}>Selection Mode</Text>
                         <Text category="c1" style={{ textAlign: 'center' }} appearance="hint">Choose whether to random select or select the verse yourself.</Text>
                         <ButtonGroup
-                            onPress={this.updateVerseSelectionModeIndex}
-                            selectedIndex={verseSelectionModeIndex}
-                            buttons={verseSelectionMode}
+                            onPress={this.updateSelectionModeIndex}
+                            selectedIndex={selectionModeIndex}
+                            buttons={selectionModeList}
                             containerStyle={{ borderRadius: 5, marginTop: 15 }}
                             selectedButtonStyle={{ backgroundColor: 'green' }}
                         />
                     </Layout>
 
                     {
-                        verseSelectionModeIndex == 0 && (
-                            <Layout style={styles.optionContainer} for="Random Level">
-                                <Text category="h6" style={{ textAlign: 'center' }}>Random Level</Text>
-                                <Text category="c1" style={{ textAlign: 'center' }} appearance="hint">Choose which level the random selection will be made.</Text>
+                        /* Random Selection Menu */
+                        selectionModeIndex == 0 && (
+                            <Layout style={styles.optionContainer} for="Random Selection">
+                                <Text category="h6" style={{ textAlign: 'center' }}>Random Selection</Text>
+                                <Text category="c1" style={{ textAlign: 'center' }} appearance="hint">Choose how the random verse should be picked.</Text>
                                 <ButtonGroup
-                                    onPress={this.updateRandomLevelIndex}
-                                    selectedIndex={randomLevelIndex}
-                                    buttons={randomLevel}
+                                    onPress={this.updateRandomSelectionIndex}
+                                    selectedIndex={randomSelectionIndex}
+                                    buttons={randomSelectionList}
                                     containerStyle={{ borderRadius: 5, marginTop: 15 }}
                                     selectedButtonStyle={{ backgroundColor: 'green' }}
                                 />
@@ -131,19 +167,55 @@ export default class PracticeOptionScreen extends React.Component {
                     }
 
                     {
-                        randomLevelIndex == 1 && (
-                            <Layout style={styles.optionContainer} for="Juz Level">
-                                <Text category="h6" style={{ textAlign: 'center' }}>Juz Selection</Text>
+                        /* User Selection Menu */
+                        selectionModeIndex == 1 && (
+                            <Layout style={styles.optionContainer} for="User Selection">
+                                <Text category="h6" style={{ textAlign: 'center' }}>User Selection</Text>
+                                <Text category="c1" style={{ textAlign: 'center' }} appearance="hint">Choose your preferred verse.</Text>
+                                <Layout style={{ flexDirection: 'row', width: '80%' }}>
+                                    <Picker
+                                        selectedValue={selectedVerseID}
+                                        onValueChange={this.updateSelectedVerseID}
+                                        enabled={verseInfoIsLoaded}
+                                        style={{ width: '40%', height: 60}}
+                                    >
+                                        {
+                                            verseInfoIsLoaded
+                                            ? verseInfo.map(verse => <Picker.Item key={verse.number_in_chapter} label={verse.number_in_chapter.toString()} value={verse._id} />)
+                                            : <Picker.Item label="Loading" value={null} />
+                                        }
+                                    </Picker>
+                                    <Picker
+                                        selectedValue={selectedChapterID}
+                                        onValueChange={this.updateSelectedChapterID}
+                                        enabled={chapterInfoIsLoaded}
+                                        style={{ width: '60%', height: 60 }}
+                                    >
+                                        {
+                                            chapterInfoIsLoaded
+                                            ? chapterInfo.map(chapter => <Picker.Item key={chapter.number} label={chapter.name} value={chapter._id} />)
+                                            : <Picker.Item label="Loading" value={null} />
+                                        }
+                                    </Picker>
+                                </Layout>
+                            </Layout>
+                        )                        
+                    }
+
+                    {
+                        randomSelectionIndex == 1 && (
+                            <Layout style={styles.optionContainer} for="Random Juz">
+                                <Text category="h6" style={{ textAlign: 'center' }}>Random Juz</Text>
                                 <Text category="c1" style={{ textAlign: 'center' }} appearance="hint">Choose which juz you want to be picked from.</Text>
                                 <Layout style={{ width: '60%', height: 60, display: 'flex', justifyContent: 'center', borderBottomWidth: 1, borderBottomColor: 'rgba(0,0,0,.15)' }}>
                                     <Picker
-                                        selectedValue={juzLevelIndex}
-                                        onValueChange={this.updateJuzLevelIndex}
+                                        selectedValue={selectedJuz}
+                                        onValueChange={this.updateSelectedJuz}
                                         style={{ width: '100%', height: '100%' }}
                                         itemStyle={{ borderColor: 'red', borderWidth: 1 }}
                                     >
                                         {
-                                            juzLevel.map(juz => <Picker.Item key={juz} label={juz.toString()} value={juz} />)
+                                            randomJuz.map(juz => <Picker.Item key={juz} label={juz.toString()} value={juz} />)
                                         }
                                     </Picker>
                                 </Layout>
@@ -152,48 +224,39 @@ export default class PracticeOptionScreen extends React.Component {
                     }
 
                     {
-                        randomLevelIndex == 2 && (
-                            <Layout style={styles.optionContainer} for="Chapter Level">
-                                <Text category="h6" style={{ textAlign: 'center' }}>Chapter Selection</Text>
-                                <Text category="c1" style={{ textAlign: 'center' }} appearance="hint">Choose which chapter you want to be picked from.</Text>
+                        randomSelectionIndex ==2 && (
+                            <Layout style={styles.optionContainer} for="Randon Chapter">
+                            <Text category="h6" style={{ textAlign: 'center' }}>Random Juz</Text>
+                                <Text category="c1" style={{ textAlign: 'center' }} appearance="hint">Choose which juz you want to be picked from.</Text>
                                 <Layout style={{ width: '60%', height: 60, display: 'flex', justifyContent: 'center', borderBottomWidth: 1, borderBottomColor: 'rgba(0,0,0,.15)' }}>
-                                    <Picker
-                                        selectedValue={chapterLevelIndex}
-                                        onValueChange={this.updateChapterLevelIndex}
+                                <Picker
+                                        selectedValue={selectedChapterID}
+                                        onValueChange={this.updateSelectedChapterID}
+                                        enabled={chapterInfoIsLoaded}
                                         style={{ width: '100%', height: '100%' }}
-                                        itemStyle={{ borderColor: 'red', borderWidth: 1 }}
                                     >
                                         {
-                                            chapterLevel.map(chapter => <Picker.Item key={chapter} label={chapter.toString()} value={chapter} />)
+                                            chapterInfoIsLoaded
+                                            ? chapterInfo.map(chapter => <Picker.Item key={chapter.number} label={chapter.name} value={chapter._id} />)
+                                            : <Picker.Item label="Loading" value={null} />
                                         }
                                     </Picker>
                                 </Layout>
                             </Layout>
                         )
                     }
-                    <Button
-                        style={[styles.submitButton, { width: '80%' }]}
-                        onPress={this.toggleVerseSelectionModalVisibility}
-                    >Select verse</Button>
 
-                    <Overlay
-                        isVisible={this.state.verseSelectionModalVisibility}
-                        overlayStyle={{ display: 'flex', justifyContent: 'center' }}
-                        onBackdropPress={this.toggleVerseSelectionModalVisibility}
-                    >
-                        <Layout style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                            <Text>Hello Modal</Text>
-                            <Button
-                                style={[styles.submitButton, { width: '80%' }]}
-                                onPress={this.updateVerseSelection}
-                            >Add verse object</Button>
-                            <Button
-                                style={[styles.submitButton, { width: '80%' }]}
-                                onPress={this.toggleVerseSelectionModalVisibility}
-                            >Close Modal</Button>
-                        </Layout>
-                    </Overlay>
+                    {
+                        selectionModeIndex == 0 && <Button style={[styles.submitButton, { width: '80%' }]} onPress={this.toggleVerseSelectionModalVisibility}>Randomise Verse</Button>
+                    }
 
+                    {
+                        isSelected && (
+                            <Layout style={{ backgroundColor: '#FFFDDD', width: '90%', padding: 20, borderLeftWidth: 4, borderLeftColor: '#FFe600' }}>
+                                <Text>Your verse is</Text>
+                                <Text>{selectedVerseID}</Text>
+                            </Layout>)   
+                    }
                 </Layout>
 
                 <Layout style={styles.cardContainer}>
@@ -208,14 +271,15 @@ export default class PracticeOptionScreen extends React.Component {
                 </Layout>
 
                 <Button
-                    disabled={!this.state.selectedVerse && true}
                     style={styles.submitButton}
-                    onPress={() => this.props.navigation.navigate("PracticeInput")}
+                    onPress={() => this.props.navigation.navigate("PracticeInput", {selectedVerseID, tashkeelFilter})}
                 >Proceed</Button>
             </ScrollView>
         );
     }
 }
+
+// <Picker.Item key={verse.number_in_chapter} label={verse.number_in_chapter.toString()} value={verse._id} />
 
 PracticeOptionScreen.navigationOptions = {
     title: 'Self Practice Option',

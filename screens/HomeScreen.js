@@ -42,27 +42,25 @@ export default class HomeScreen extends React.Component {
     render() {
         const { userInput, withTashkeel, inputErrorStatus } = this.state;
         return (
-            <ImageBackground source={background} style={{ width: '100%', height: '100%' }}>
-                <ScrollView style={styles.background}>
+            <ScrollView style={styles.background}>
                 
-                    <QuranQueryInput
-                        userInput={userInput}
-                        withTashkeel={withTashkeel}
-                        updateUserInput={this.updateUserInput}
-                        inputError={this.inputError}
-                    />
-                    <QuranQueryOption
-                        withTashkeel={withTashkeel}
-                        updateTashkeelOption={this.updateTashkeelOption}
-                    />
+                <QuranQueryInput
+                    userInput={userInput}
+                    withTashkeel={withTashkeel}
+                    updateUserInput={this.updateUserInput}
+                    inputError={this.inputError}
+                />
+                <QuranQueryOption
+                    withTashkeel={withTashkeel}
+                    updateTashkeelOption={this.updateTashkeelOption}
+                />
 
-                    <Button
-                        disabled={(inputErrorStatus || userInput == '') ? true : false}
-                        style={styles.submitButton}
-                        onPress={() => this.props.navigation.navigate('HomeResult', this.state)}
-                    >Check</Button>
-                </ScrollView>
-            </ImageBackground>
+                <Button
+                    disabled={(inputErrorStatus || userInput == '') ? true : false}
+                    style={styles.submitButton}
+                    onPress={() => this.props.navigation.navigate('HomeResult', this.state)}
+                >Check</Button>
+            </ScrollView>
         );
     }
 }

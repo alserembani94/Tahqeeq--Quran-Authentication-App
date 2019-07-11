@@ -15,6 +15,7 @@ export default class PracticeInputScreen extends React.Component {
         super(props);
         this.state = {
             userInput: '',
+            withTashkeel: true,
         };
         this.updateUserInput = this.updateUserInput.bind(this);
     }
@@ -24,6 +25,8 @@ export default class PracticeInputScreen extends React.Component {
     }
 
     render() {
+        console.log(this.props.navigation)
+
         return (
             <ScrollView style={styles.background}>
                 <Layout style={[styles.cardContainer, { marginTop: 50 }]}>
@@ -35,7 +38,7 @@ export default class PracticeInputScreen extends React.Component {
 
                     <Input
                         label="Type here"
-                        placeholder={ this.state.withTashkeel ? "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ" : "بسم الله الرحمن الرحيم" }
+                        placeholder={ this.props.navigation.getParam('tashkeelFilter') ? "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ" : "بسم الله الرحمن الرحيم" }
                         size="large"
                         textStyle={{fontFamily: 'hafs', fontSize: 24, textAlign: 'center' }}
                         status={ null }
@@ -45,6 +48,7 @@ export default class PracticeInputScreen extends React.Component {
                         numberOfLines={10}
                     />
                 </Layout>
+
                 <Button
                     style={styles.submitButton}
                     onPress={() => this.props.navigation.navigate("PracticeResult")}
@@ -56,4 +60,5 @@ export default class PracticeInputScreen extends React.Component {
 
 PracticeInputScreen.navigationOptions = {
     header: null,
+    tabBarVisible: false,
 }
