@@ -15,7 +15,7 @@ const removeBasmalah = (verse) => {
 }
 
 // -------------------- REMOVING TASHKEEL FOR FILTER PURPOSE ---------------------------- //
-const removeTashkeel = (verse) => {
+export const removeTashkeel = (verse) => {
     return verse.match(/[\u0621-\u064A\s\u0671-\u0673]/g).join('').replace(/[\u0671\u0622\u0623\u0625]/g, `\u0627`);
 }
 
@@ -49,7 +49,7 @@ export const errorFilter = (userInput, bestMatch, tashkeelOption) => {
 
 // ------------------------ ERROR DISTANCE CALCULATION ------------------------ //
 export const errorDistance = (verse, userInput, tashkeelOption) => {
-    const verseProcessed = removeBasmalah(verse);
+    let verseProcessed = removeBasmalah(verse);
     if(!tashkeelOption) {
         verseProcessed = removeTashkeel(verseProcessed);
     }

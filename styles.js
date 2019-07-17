@@ -5,6 +5,7 @@ import {
 
 export default styles = StyleSheet.create({
     background: {
+        minHeight: window.innerHeight,
     },
     //212740
     //#F9F9F9

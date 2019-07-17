@@ -28,7 +28,7 @@ export default class PracticeOptionScreen extends React.Component {
             tashkeelFilter: false,
 
             selectedChapterID: null,
-            selectedVerseID: null,
+            selectedVerse: null,
             chapterInfoIsLoaded: false,
             verseInfoIsLoaded: false,
 
@@ -52,7 +52,7 @@ export default class PracticeOptionScreen extends React.Component {
         }).then(() => {
             this.fetchVersesInChapter(this.state.selectedChapterID).then(verseInfo => {
                 this.setState({ verseInfo, verseInfoIsLoaded: true })
-                this.state.selectedVerseID == null && this.setState({ selectedVerseID: verseInfo[0]._id })
+                this.state.selectedVerse == null && this.setState({ selectedVerse: verseInfo[0] })
             })
         }).catch(
             error => console.log(error)
@@ -83,12 +83,12 @@ export default class PracticeOptionScreen extends React.Component {
         this.setState({ selectedChapterID, verseInfoIsLoaded: false });
         this.fetchVersesInChapter(selectedChapterID).then(verseInfo => {
             this.setState({ verseInfo, verseInfoIsLoaded: true })
-            this.state.selectedVerseID == null && this.setState({ selectedVerseID: verseInfo[0]._id })
+            this.state.selectedVerse == null && this.setState({ selectedVerse: verseInfo[0] })
         })
     }
 
-    updateSelectedVerseID(selectedVerseID) {
-        this.setState({ selectedVerseID, isSelected: true });
+    updateSelectedVerseID(selectedVerse) {
+        this.setState({ selectedVerse, isSelected: true });
     }
 
     fetchChapterInfo = async() => {
@@ -110,7 +110,7 @@ export default class PracticeOptionScreen extends React.Component {
     }
 
     render() {
-        const { practiceModeIndex, selectionModeIndex, randomSelectionIndex, selectedJuz, tashkeelFilter, selectedChapterID, chapterInfo, chapterInfoIsLoaded, selectedVerseID, verseInfo, verseInfoIsLoaded, selectedVerseObject, isSelected } = this.state;
+        const { practiceModeIndex, selectionModeIndex, randomSelectionIndex, selectedJuz, tashkeelFilter, selectedChapterID, chapterInfo, chapterInfoIsLoaded, selectedVerse, verseInfo, verseInfoIsLoaded, selectedVerseObject, isSelected } = this.state;
         const practiceModeList = ['Hafazan'];
         const selectionModeList = ['Random', 'User Select'];
         const randomSelectionList = ['Whole Quran', 'Juz', 'Chapter'];
@@ -174,14 +174,14 @@ export default class PracticeOptionScreen extends React.Component {
                                 <Text category="c1" style={{ textAlign: 'center' }} appearance="hint">Choose your preferred verse.</Text>
                                 <Layout style={{ flexDirection: 'row', width: '80%' }}>
                                     <Picker
-                                        selectedValue={selectedVerseID}
+                                        selectedValue={selectedVerse}
                                         onValueChange={this.updateSelectedVerseID}
                                         enabled={verseInfoIsLoaded}
                                         style={{ width: '40%', height: 60}}
                                     >
                                         {
                                             verseInfoIsLoaded
-                                            ? verseInfo.map(verse => <Picker.Item key={verse.number_in_chapter} label={verse.number_in_chapter.toString()} value={verse._id} />)
+                                            ? verseInfo.map(verse => <Picker.Item key={verse.number_in_chapter} label={verse.number_in_chapter.toString()} value={verse} />)
                                             : <Picker.Item label="Loading" value={null} />
                                         }
                                     </Picker>
@@ -247,14 +247,14 @@ export default class PracticeOptionScreen extends React.Component {
                     }
 
                     {
-                        selectionModeIndex == 0 && <Button style={[styles.submitButton, { width: '80%' }]} onPress={this.toggleVerseSelectionModalVisibility}>Randomise Verse</Button>
+                        selectionModeIndex == 0 && <Button disabled style={[styles.submitButton, { width: '80%' }]} onPress={this.toggleVerseSelectionModalVisibility}>Randomise Verse</Button>
                     }
 
                     {
-                        isSelected && (
-                            <Layout style={{ backgroundColor: '#FFFDDD', width: '90%', padding: 20, borderLeftWidth: 4, borderLeftColor: '#FFe600' }}>
+                        selectedVerse && (
+                            <Layout style={{ backgroundColor: '#FFFDDD', width: '90%', padding: 20, borderLeftWidth: 4, borderLeftColor: '#FFe600', alignItems: 'center' }}>
                                 <Text>Your verse is</Text>
-                                <Text>{selectedVerseID}</Text>
+                                <Text>[{selectedVerse.chapter.name} : {selectedVerse.number_in_chapter} ]</Text>
                             </Layout>)   
                     }
                 </Layout>
@@ -272,14 +272,13 @@ export default class PracticeOptionScreen extends React.Component {
 
                 <Button
                     style={styles.submitButton}
-                    onPress={() => this.props.navigation.navigate("PracticeInput", {selectedVerseID, tashkeelFilter})}
+                    onPress={() => this.props.navigation.navigate("PracticeInput", {selectedVerse, tashkeelFilter})}
+                    disabled={!selectedVerse}
                 >Proceed</Button>
             </ScrollView>
         );
     }
 }
-
-// <Picker.Item key={verse.number_in_chapter} label={verse.number_in_chapter.toString()} value={verse._id} />
 
 PracticeOptionScreen.navigationOptions = {
     title: 'Self Practice Option',

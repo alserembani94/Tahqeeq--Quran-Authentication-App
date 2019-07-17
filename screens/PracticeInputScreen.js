@@ -3,6 +3,9 @@ import {
     ScrollView,
 } from 'react-native';
 import {
+    Overlay,
+} from 'react-native-elements';
+import {
     Button,
     Input,
     Layout,
@@ -15,18 +18,34 @@ export default class PracticeInputScreen extends React.Component {
         super(props);
         this.state = {
             userInput: '',
-            withTashkeel: true,
+            withTashkeel: this.props.navigation.getParam('tashkeelFilter'),
+            confirmMessageVisibility: false,
+            selectedVerse: this.props.navigation.getParam('selectedVerse').textual[0].text,
         };
         this.updateUserInput = this.updateUserInput.bind(this);
+        this.submitInput = this.submitInput.bind(this);
+        this.changeVisibility = this.changeVisibility.bind(this);
+    }
+
+    componentDidMount() {
+        const timeStart = new Date();
+        this.setState({ timeStart })
     }
 
     updateUserInput(userInput) {
         this.setState({ userInput });
     }
 
-    render() {
-        console.log(this.props.navigation)
+    submitInput = () => {
+        const timeEnd = new Date();
+        this.setState({ timeEnd, confirmMessageVisibility: !this.state.confirmMessageVisibility });
+    }
 
+    changeVisibility() {
+        this.setState({ confirmMessageVisibility: !this.state.confirmMessageVisibility })
+    }
+
+    render() {
         return (
             <ScrollView style={styles.background}>
                 <Layout style={[styles.cardContainer, { marginTop: 50 }]}>
@@ -51,8 +70,25 @@ export default class PracticeInputScreen extends React.Component {
 
                 <Button
                     style={styles.submitButton}
-                    onPress={() => this.props.navigation.navigate("PracticeResult")}
+                    onPress={this.submitInput}
                 >Submit</Button>
+
+                <Overlay
+                    isVisible={this.state.confirmMessageVisibility}
+                    onBackdropPress={this.changeVisibility}
+                    height="auto"
+                >
+                    <Layout style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+                        <Text>Are you sure with your submission?</Text>
+                        <Button
+                            style={styles.submitButton}
+                            onPress={() => {
+                                this.setState({  confirmMessageVisibility: false })
+                                this.props.navigation.navigate('PracticeResult', this.state)
+                            }}
+                        >Submit</Button>
+                    </Layout>
+                </Overlay>
             </ScrollView>
         );
     }
