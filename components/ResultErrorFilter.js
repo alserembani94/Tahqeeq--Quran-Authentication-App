@@ -17,7 +17,7 @@ export default class ResultErrorFilter extends React.Component {
                                 return <ArabicText key={index} style={{ color: 'orange'}}>{part.value}</ArabicText>
                             }
                             else if(part.removed) {
-                                return <ArabicText key={index} style={{ color: 'red' }}>{part.value}</ArabicText>
+                                return <ArabicText key={index} style={{ color: 'blue' }}>{part.value}</ArabicText>
                             }
                             else {
                                 return <ArabicText key={index} style={{ color: 'green' }}>{part.value}</ArabicText>

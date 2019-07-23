@@ -20,11 +20,11 @@ export default class QuranicResultMatch extends React.Component {
 
         return (
             <Layout style={styles.cardContainer}>
-                <Text category="h6">Error Highlight</Text>
+                <Text category="h6">Input Filter</Text>
                 <ResultErrorFilter errorFilteredVerse={errorFilteredVerse}/>
                 <Card title="Legend">
                     <Text category="c1" appearance='hint' style={{ textAlign: 'center'}}><Text category="c1" style={{ color: 'red'}}>Red Letter</Text> indicates the missing letter in your input.</Text>
-                    <Text category="c1" appearance='hint' style={{ textAlign: 'center'}}><Text category="c1" style={{ color: 'orange'}}>Orange Letter</Text> indicates the additional letter found in your input.</Text>
+                    <Text category="c1" appearance='hint' style={{ textAlign: 'center'}}><Text category="c1" style={{ color: 'blue'}}>Blue Letter</Text> indicates the additional letter found in your input.</Text>
                     <Text category="c1" appearance='hint' style={{ textAlign: 'center'}}><Text category="c1" style={{ color: 'green'}}>Green Letter</Text> indicates the letter that matches with the targeted verse.</Text>
                 </Card>
             </Layout>

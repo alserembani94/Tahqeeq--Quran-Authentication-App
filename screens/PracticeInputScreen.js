@@ -52,12 +52,12 @@ export default class PracticeInputScreen extends React.Component {
                     <Text category="h4">Self Practice</Text>
 
                     <Text appearance="hint">Your selected verse is</Text>
-                    <Text appearance="hint">[Surah al-Baqarah, 2: 16]</Text>
+                    <Text appearance="hint">[{this.props.navigation.getParam('selectedVerse').chapter.name} : {this.props.navigation.getParam('selectedVerse').number_in_chapter} ]</Text>
                     <Text></Text>
 
                     <Input
                         label="Type here"
-                        placeholder={ this.props.navigation.getParam('tashkeelFilter') ? "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ" : "بسم الله الرحمن الرحيم" }
+                        placeholder={ this.props.navigation.getParam('tashkeelFilter') ? "اُكْتُبْ هُنَا" : "اكتب هنا" }
                         size="large"
                         textStyle={{fontFamily: 'hafs', fontSize: 24, textAlign: 'center' }}
                         status={ null }

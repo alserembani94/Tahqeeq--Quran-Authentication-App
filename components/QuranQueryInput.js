@@ -5,7 +5,6 @@ import {
     Input,
     Layout,
     Text,
-    Toggle,
 } from 'react-native-ui-kitten';
 import styles from '../styles';
 
@@ -42,9 +41,9 @@ export default class QuranQueryInput extends React.Component {
                 <Input
                     label="User Input"
                     caption={ this.state.inputError ? this.state.inputError : "Type or paste the quranic verse here to be checked."}
-                    placeholder={ this.state.withTashkeel ? "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ" : "بسم الله الرحمن الرحيم" }
+                    placeholder="اكتب هنا"
                     size="large"
-                    textStyle={{fontFamily: 'hafs', fontSize: 24}}
+                    textStyle={{fontFamily: 'hafs', fontSize: 24, textAlign: 'center'}}
                     status={ this.state.inputError ? 'danger' : this.props.userInput ? 'success' : null }
                     multiline={true}
                     value={this.props.userInput}
